@@ -1,0 +1,17 @@
+Flask==2.3.3
+Flask-SQLAlchemy==3.0.5
+Flask-SocketIO==5.3.6
+Flask-Migrate==4.0.5
+Flask-Mail==0.9.1
+Flask-CORS==4.0.0
+python-socketio==5.8.0
+eventlet==0.33.3
+PyNaCl==1.5.0
+cryptography==41.0.4
+email-validator==2.1.0
+python-dotenv==1.0.0
+Werkzeug==2.3.7
+qrcode==7.4.2
+#pillow==11.3.0
+wave==0.0.2
+pydub==0.25.1

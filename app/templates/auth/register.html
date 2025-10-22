@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In – Secure Chat{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h2 class="auth-title">Sign In</h2>
+        <p class="auth-subtitle">Enter your email to receive a secure login link.</p>
+
+        <form id="loginForm" class="auth-form">
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="you@example.com"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+                Send Login Link
+            </button>
+        </form>
+
+        <div class="auth-links">
+            <p>Don’t have an account?
+                <a href="{{ url_for('auth.register_page') }}">Sign up</a>
+            </p>
+        </div>
+
+        <div id="loginStatus" class="auth-status"></div>
+    </div>
+</div>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const status = document.getElementById("loginStatus");
+    status.textContent = "Sending login link...";
+
+    try {
+        const response = await fetch("{{ url_for('auth.login') }}", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            status.textContent = "✅ Login link sent! Check your email.";
+            status.classList.add("success");
+        } else {
+            status.textContent = "❌ " + (result.error || "Login failed");
+            status.classList.add("error");
+        }
+    } catch (err) {
+        status.textContent = "⚠️ Connection error: " + err.message;
+        status.classList.add("error");
+    }
+});
+</script>
+{% endblock %}

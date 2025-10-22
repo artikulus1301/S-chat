@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}Register - S-Chat{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-form">
+        <h2>Create Account</h2>
+        
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required 
+                       placeholder="Enter your email address">
+                <small class="form-text">We'll send a verification link to this email</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required 
+                       placeholder="Choose a username" minlength="3">
+                <small class="form-text">At least 3 characters long</small>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div style="position: relative;">
+                    <input type="password" id="password" name="password" required 
+                           placeholder="Enter a secure password" minlength="6">
+                    <button type="button" id="togglePassword" 
+                            style="position:absolute; right:10px; top:7px; background:none; border:none; cursor:pointer; color:#007bff;">
+                        👁️
+                    </button>
+                </div>
+                <small class="form-text">Minimum 6 characters</small>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" required 
+                       placeholder="Repeat your password">
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-block" id="submitBtn">
+                Create Account
+            </button>
+        </form>
+        
+        <div class="auth-links">
+            <p>Already have an account? <a href="{{ url_for('auth.login_page') }}">Sign in</a></p>
+        </div>
+
+        <div id="error-message" class="error-message" style="display:none;"></div>
+    </div>
+</div>
+
+<style>
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+.auth-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+}
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+.form-text { color: #6c757d; font-size: 0.875rem; margin-top: 0.25rem; }
+.btn {
+    padding: 0.75rem 1.5rem; border: none; border-radius: 4px;
+    font-size: 1rem; cursor: pointer; display: block; width: 100%;
+}
+.btn-primary { background: #007bff; color: white; }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.auth-links { margin-top: 1rem; text-align: center; }
+.error-message {
+    color: #dc3545; background: #f8d7da;
+    padding: 0.75rem; border-radius: 4px; margin-top: 1rem;
+}
+</style>
+
+<script>
+document.getElementById('togglePassword').addEventListener('click', function() {
+    const input = document.getElementById('password');
+    input.type = input.type === 'password' ? 'text' : 'password';
+});
+
+document.getElementById('registerForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const submitBtn = document.getElementById('submitBtn');
+    const errorDiv = document.getElementById('error-message');
+    errorDiv.style.display = 'none';
+
+    const email = document.getElementById('email').value.trim();
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    const confirm = document.getElementById('confirmPassword').value;
+
+    if (password !== confirm) {
+        errorDiv.textContent = 'Passwords do not match.';
+        errorDiv.style.display = 'block';
+        return;
+    }
+
+    if (password.length < 6) {
+        errorDiv.textContent = 'Password must be at least 6 characters.';
+        errorDiv.style.display = 'block';
+        return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Creating Account...';
+
+    const data = { email, username, password };
+
+    try {
+        const response = await fetch('{{ url_for("auth.register") }}', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            alert('Registration successful! Please verify your email.');
+            window.location.href = '{{ url_for("auth.login_page") }}';
+        } else {
+            errorDiv.textContent = result.error || 'Registration failed.';
+            errorDiv.style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Registration error:', error);
+        errorDiv.textContent = 'Connection error. Try again later.';
+        errorDiv.style.display = 'block';
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Create Account';
+    }
+});
+</script>
+{% endblock %}

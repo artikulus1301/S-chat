@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Verify Your Email - S-Chat</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            line-height: 1.6; 
+            color: #333; 
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+        }
+        .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            background: white;
+        }
+        .header { 
+            background: #2c3e50; 
+            color: white; 
+            padding: 30px 20px; 
+            text-align: center; 
+        }
+        .content { 
+            padding: 30px; 
+        }
+        .button { 
+            display: inline-block; 
+            padding: 12px 30px; 
+            background: #3498db; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .footer { 
+            text-align: center; 
+            padding: 20px; 
+            font-size: 12px; 
+            color: #666;
+            background: #f8f9fa;
+        }
+        .verification-code {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔒 S-Chat</h1>
+            <p>Secure Messaging Platform</p>
+        </div>
+        
+        <div class="content">
+            <h2>Verify Your Email Address</h2>
+            <p>Hello <strong>{{ user.username }}</strong>,</p>
+            <p>Thank you for registering with S-Chat! To complete your registration and start using our secure messaging platform, please verify your email address by clicking the button below:</p>
+            
+            <p style="text-align: center;">
+                <a href="{{ verification_url }}" class="button">Verify Email Address</a>
+            </p>
+            
+            <p>If the button doesn't work, you can copy and paste the following link into your browser:</p>
+            <p style="word-break: break-all;"><a href="{{ verification_url }}">{{ verification_url }}</a></p>
+            
+            <p>This verification link will expire in 24 hours.</p>
+            
+            <div class="verification-code">
+                Or use this verification token:<br>
+                <strong>{{ user.verification_token }}</strong>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>If you didn't create an account with S-Chat, please ignore this email.</p>
+            <p>&copy; 2024 S-Chat. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to S-Chat{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <div class="hero-content">
+        <h2>Secure Private Messaging</h2>
+        <p>End-to-end encrypted chats with maximum privacy. No phone number required.</p>
+        
+        <div class="hero-buttons">
+            <a href="{{ url_for('auth.register_page') }}" class="btn btn-primary">Get Started</a>
+            <a href="{{ url_for('auth.login_page') }}" class="btn btn-secondary">Sign In</a>
+        </div>
+    </div>
+</div>
+
+<div class="features">
+    <div class="feature">
+        <h3>🔒 End-to-End Encryption</h3>
+        <p>Your messages are encrypted so only you and the recipient can read them.</p>
+    </div>
+    
+    <div class="feature">
+        <h3>📧 Email Only</h3>
+        <p>No phone number needed. Register with just your email and username.</p>
+    </div>
+    
+    <div class="feature">
+        <h3>🎙️ Voice Messages</h3>
+        <p>Send encrypted voice messages in any chat.</p>
+    </div>
+    
+    <div class="feature">
+        <h3>👥 Group Chats</h3>
+        <p>Create secure group chats with up to 50 people.</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: secure-chat
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python run.py"
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: BASE_URL
+        value: "https://your-app.onrender.com"

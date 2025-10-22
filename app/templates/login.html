@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Login - S-Chat{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-form">
+        <h2>Sign In</h2>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="identifier">Email or Username</label>
+                <input type="text" id="identifier" name="identifier" required placeholder="Enter email or username">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div style="position: relative;">
+                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                    <button type="button" id="togglePassword" 
+                            style="position:absolute; right:10px; top:7px; background:none; border:none; cursor:pointer; color:#007bff;">
+                        👁️
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </form>
+
+        <div class="auth-links">
+            <p>Don't have an account? <a href="{{ url_for('auth.register_page') }}">Sign up</a></p>
+        </div>
+
+        <div id="error-message" style="color: red; margin-top: 15px; display:none;"></div>
+    </div>
+</div>
+
+<script>
+document.getElementById('togglePassword').addEventListener('click', function() {
+    const passwordInput = document.getElementById('password');
+    passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+});
+
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const identifier = document.getElementById('identifier').value.trim();
+    const password = document.getElementById('password').value;
+    const errorDiv = document.getElementById('error-message');
+    errorDiv.style.display = 'none';
+
+    const isEmail = identifier.includes('@');
+    const data = isEmail ? { email: identifier, password } : { username: identifier, password };
+
+    try {
+        const response = await fetch('{{ url_for("auth.login") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            window.location.href = '/';
+        } else {
+            errorDiv.textContent = result.error || 'Invalid credentials';
+            errorDiv.style.display = 'block';
+        }
+    } catch (error) {
+        errorDiv.textContent = 'Login failed: ' + error.message;
+        errorDiv.style.display = 'block';
+    }
+});
+</script>
+{% endblock %}

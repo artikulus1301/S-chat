@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Chat - S-Chat{% endblock %}
+
+{% block content %}
+<div class="chat-layout">
+    <!-- Sidebar with chats -->
+    <div class="chat-sidebar">
+        <div class="sidebar-header">
+            <h3>Chats</h3>
+            <button id="createChatBtn" class="btn btn-sm">+ New Chat</button>
+        </div>
+        
+        <div class="chats-list" id="chatsList">
+            <!-- Chats will be loaded here -->
+        </div>
+        
+        <div class="user-info">
+            <strong id="currentUsername"></strong>
+            <small id="currentEmail"></small>
+        </div>
+    </div>
+    
+    <!-- Main chat area -->
+    <div class="chat-main">
+        <div class="chat-header">
+            <h3 id="currentChatName">Select a chat</h3>
+            <div id="typingIndicator" class="typing-indicator" style="display: none;">
+                <span>Someone is typing...</span>
+            </div>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be displayed here -->
+        </div>
+        
+        <div class="chat-input-area">
+            <div class="input-tools">
+                <button id="attachFileBtn" title="Attach file">📎</button>
+                <button id="recordAudioBtn" title="Record voice message">🎙️</button>
+            </div>
+            
+            <div class="input-container">
+                <input type="text" id="messageInput" placeholder="Type a message..." disabled>
+                <button id="sendMessageBtn" disabled>Send</button>
+            </div>
+            
+            <div id="recordingControls" style="display: none;">
+                <span>Recording... </span>
+                <button id="stopRecordingBtn">Stop</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Chat Modal -->
+<div id="createChatModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Create New Chat</h3>
+        
+        <form id="createChatForm">
+            <div class="form-group">
+                <label>Chat Type</label>
+                <div>
+                    <input type="radio" id="individualChat" name="chatType" value="individual" checked>
+                    <label for="individualChat">Individual</label>
+                    
+                    <input type="radio" id="groupChat" name="chatType" value="group">
+                    <label for="groupChat">Group</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="chatName">Chat Name (for groups)</label>
+                <input type="text" id="chatName" name="chatName" placeholder="Enter group name">
+            </div>
+            
+            <div class="form-group">
+                <label for="userSearch">Add Users</label>
+                <input type="text" id="userSearch" placeholder="Search users by email or username">
+                <div id="userSearchResults" class="search-results"></div>
+            </div>
+            
+            <div id="selectedUsers" class="selected-users"></div>
+            
+            <button type="submit" class="btn btn-primary">Create Chat</button>
+        </form>
+    </div>
+</div>
+
+<input type="file" id="fileInput" style="display: none;">
+
+<script>
+// This will be populated by the backend
+const CURRENT_USER = {
+    id: "{{ current_user.id if current_user else '' }}",
+    username: "{{ current_user.username if current_user else '' }}",
+    email: "{{ current_user.email if current_user else '' }}"
+};
+</script>
+
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{% endblock %}
