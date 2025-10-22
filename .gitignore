@@ -1,31 +1,11 @@
-# Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-
-# Virtual environments
-venv/
-.env/
-.venv/
-env/
-
-# Instance / local DB / uploads
-instance/
 *.db
 *.sqlite3
-uploads/
-app/static/uploads/
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Secrets
 .env
-.env.local
-
-# Tests / cache
-.coverage
-htmlcov/
-build/
+venv/
+.venv/
+instance/
+.DS_Store
